@@ -41,8 +41,6 @@ jobs:
       - name: Build EXE with PyInstaller
         shell: pwsh
         run: |
-          # Jeżeli chcesz wygenerować plik bez okna konsoli (GUI-only), dodaj --noconsole; 
-          # jeśli CLI, pomiń flagę --noconsole.
           pyinstaller --onefile --noconsole src/main.py
 
       # 6. Przesłanie skompilowanego pliku EXE jako artifact
