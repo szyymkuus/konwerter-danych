@@ -1,0 +1,53 @@
+name: Buduj i publikuj EXE
+
+on:
+  # 1) Uruchomienie automatyczne raz w tygodniu
+  schedule:
+    - cron:  '0 3 * * 0'    # niedziela o 03:00 UTC
+  # 2) Po każdym pushu na gałąź main
+  push:
+    branches:
+      - main
+  # 3) Możliwość uruchomienia ręcznego przez użytkownika
+  workflow_dispatch:
+
+jobs:
+  build_exe:
+    name: Budowanie pliku EXE
+    runs-on: windows-latest
+
+    steps:
+      # 1. Pobranie kodu z repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Ustawienie Pythona (musimy mieć zainstalowany Python na runnerze)
+      - name: Setup Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # 4. Instalacja zależności
+      - name: Install dependencies via PowerShell
+        shell: pwsh
+        run: |
+          # Jeżeli dotychczas skrypt tworzył (lub zakłada wirtualne środowisko), aktywuj je:
+          # .\venv\Scripts\Activate.ps1
+
+          # Uruchamiamy skrypt, który ma w sobie 'pip install pyyaml PyQt5 lxml pyinstaller'
+          .\installResources.ps1
+
+      # 5. Budowanie EXE za pomocą PyInstaller
+      - name: Build EXE with PyInstaller
+        shell: pwsh
+        run: |
+          # Jeżeli chcesz wygenerować plik bez okna konsoli (GUI-only), dodaj --noconsole; 
+          # jeśli CLI, pomiń flagę --noconsole.
+          pyinstaller --onefile --noconsole src/main.py
+
+      # 6. Przesłanie skompilowanego pliku EXE jako artifact
+      - name: Upload built EXE as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: konwerter-exe         # dowolna, opisowa nazwa artefaktu
+          path: dist/main.exe         # ścieżka do wygenerowanego pliku
