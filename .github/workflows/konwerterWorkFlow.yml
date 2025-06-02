@@ -35,7 +35,10 @@ jobs:
         shell: pwsh
         run: |
           .\installResources.ps1
-
+      # 3.5 usunięcie starego pliku
+      - name: Remove old EXE if exists
+        run: |
+          if exist dist\konwerter-exe del dist\konwerter-exe
       # 4. Budowanie EXE za pomocą PyInstaller
       - name: Build EXE with PyInstaller
         shell: pwsh
