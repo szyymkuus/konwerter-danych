@@ -67,5 +67,5 @@ jobs:
       - name: Upload built EXE as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: konwerter-exe
+          name: konwerter-exe.exe
           path: dist/konwerter-exe
