@@ -31,10 +31,6 @@ jobs:
       - name: Install dependencies via PowerShell
         shell: pwsh
         run: |
-          # Jeżeli dotychczas skrypt tworzył (lub zakłada wirtualne środowisko), aktywuj je:
-          # .\venv\Scripts\Activate.ps1
-
-          # Uruchamiamy skrypt, który ma w sobie 'pip install pyyaml PyQt5 lxml pyinstaller'
           .\installResources.ps1
 
       # 5. Budowanie EXE za pomocą PyInstaller
